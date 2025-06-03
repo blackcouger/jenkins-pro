@@ -2,14 +2,14 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = "your-dockerhub/my-app"
+        DOCKER_IMAGE = "docker4241/my-app"
         K8S_NAMESPACE = "dev"
     }
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', 
-                url: 'https://github.com/your-username/my-app.git'
+                url: 'https://github.com/blackcouger/jenkins-pro.git'
             }
         }
         
@@ -37,7 +37,7 @@ pipeline {
         stage('Push to Registry') {
             steps {
                 script {
-                    docker.withRegistry('', 'dockerhub-creds') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
                         docker.image("${DOCKER_IMAGE}:${BUILD_NUMBER}").push()
                     }
                 }
