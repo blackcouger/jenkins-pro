@@ -1,1 +1,20 @@
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: app
+        image: your-dockerhub/my-app  # Will be replaced by Jenkins
+        ports:
+        - containerPort: 5000
