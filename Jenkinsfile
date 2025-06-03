@@ -60,21 +60,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            cleanWs()
-        }
-        success {
-            slackSend(
-                channel: '#devops',
-                message: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-            )
-        }
-        failure {
-            slackSend(
-                channel: '#devops',
-                message: "❌ Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-            )
-        }
-    }
 }
