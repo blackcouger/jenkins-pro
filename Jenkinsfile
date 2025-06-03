@@ -22,7 +22,7 @@ pipeline {
             }
             steps {
                 sh 'pip install -r requirements.txt'
-                sh 'pytest'  # Your test command
+                sh 'pytest'
             }
         }
         
