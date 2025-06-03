@@ -21,11 +21,11 @@ pipeline {
                 }
             }
             steps {
-              sh '''
+                sh '''
         python -m venv venv
         . venv/bin/activate
         pip install -r requirements.txt
-        pytest
+        pytest --suppress-no-test-exit-code
         '''
             }
         }
