@@ -37,7 +37,7 @@ pipeline {
         stage('Push to Registry') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-id') {
                         docker.image("${DOCKER_IMAGE}:${BUILD_NUMBER}").push()
                     }
                 }
