@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     environment {
@@ -17,16 +16,17 @@ pipeline {
             agent {
                 docker {
                     image 'python:3.9'
-                    args '-v $PWD:/app'
+                    args '-v $PWD:/app -w /app'  // Added working directory
                 }
             }
             steps {
                 sh '''
-        python -m venv venv
-        . venv/bin/activate
-        pip install -r requirements.txt
-        pytest --suppress-no-test-exit-code
-        '''
+                    python -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip  // Fix pip version warning
+                    pip install -r requirements.txt
+                    pytest  // Removed invalid flag
+                '''
             }
         }
         
@@ -53,7 +53,7 @@ pipeline {
                 script {
                     sh """
                     kubectl config use-context your-k8s-context
-                    kubectl set image deployment/my-app \
+                    kubectl set image deployment/my-app \\
                     app=${DOCKER_IMAGE}:${BUILD_NUMBER} -n ${K8S_NAMESPACE}
                     """
                 }
@@ -68,6 +68,12 @@ pipeline {
             slackSend(
                 channel: '#devops',
                 message: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+            )
+        }
+        failure {
+            slackSend(
+                channel: '#devops',
+                message: "❌ Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
             )
         }
     }
